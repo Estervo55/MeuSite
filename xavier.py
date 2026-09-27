@@ -94,4 +94,4 @@ def perguntar():
     })
 
 
-app.run(debug=True)
+app.run()
