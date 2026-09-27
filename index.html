@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Xavier IA</title>
+
+    <style>
+        body {
+            background-color: #111827;
+            color: white;
+            font-family: Arial;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 35px;
+        }
+
+        input {
+            width: 320px;
+            padding: 13px;
+            border-radius: 8px;
+            border: 1px solid #374151;
+            background-color: #1f2937;
+            color: white;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #9ca3af;
+        }
+
+        input:focus {
+            border-color: #60a5fa;
+        }
+
+        button {
+            padding: 13px 22px;
+            margin-left: 8px;
+            border: none;
+            border-radius: 8px;
+            background-color: #2563eb;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #3b82f6;
+            box-shadow: 0 0 15px #3b82f6;
+            transform: scale(1.05);
+        }
+
+        #resposta {
+            margin-top: 30px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Xavier IA</h1>
+
+    <input id="pergunta" type="text" placeholder="Digite sua pergunta...">
+
+    <button onclick="perguntar()">Enviar</button>
+
+    <div id="resposta"></div>
+
+    <script>
+        async function perguntar() {
+
+            let pergunta = document.getElementById("pergunta").value;
+
+            let resposta = await fetch("/perguntar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    pergunta: pergunta
+                })
+            });
+
+            let dados = await resposta.json();
+
+            document.getElementById("resposta").innerText = dados.resposta;
+        }
+    </script>
+
+</body>
+</html>
