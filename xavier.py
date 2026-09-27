@@ -92,6 +92,3 @@ def perguntar():
     return jsonify({
         "resposta": resposta
     })
-
-
-app.run()
