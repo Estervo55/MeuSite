@@ -1,13 +1,27 @@
 from flask import Flask, request, jsonify, send_file
 import random
+import requests
 from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
+url = "https://api.open-meteo.com/v1/forecast?latitude=-16.68&longitude=-49.25&current=temperature_2m"
+urlsaopaulo = "https://api.open-meteo.com/v1/forecast?latitude=-23.555&longitude=-46.63&current=temperature_2m"
+
+respostas = requests.get(url)
+respostasaopaulo = requests.get(urlsaopaulo)
+
+dados = respostas.json()
+dadossaopaulo = respostasaopaulo.json()
+
+temperatura = dados["current"]["temperature_2m"]
+temperaturasaopaulo = dadossaopaulo["current"]["temperature_2m"]
+
+
 respostas_desconhecidas = [
     "Xavier: Infelizmente não consigo te responder isso",
     "Xavier: Ainda não consigo responder essa pergunta",
-    "Xavier: Infelizmente nao tenho essas imformações",
+    "Xavier: Infelizmente nao tenho essas informações",
 ]
 
 respostas_somas = [
@@ -27,8 +41,8 @@ def responder(pergunta):
     if pergunta == "":
         return ""
 
-    if "oi" in pergunta or "ola" in pergunta or "opa" in pergunta or "eai" in pergunta:
-        return "Xavier: Opa, sou Xavier seu assistente pessoal, em que posso te ajudar?"
+    if pergunta == "oi" or pergunta == "ola" or pergunta == "opa" or pergunta == "eai":
+        return "Xavier: Opa, como posso te ajudar hoje?"
 
     elif "hora" in pergunta:
         return "Xavier: Agora são " + hora
@@ -53,6 +67,15 @@ def responder(pergunta):
 
     elif "criador" in pergunta:
         return "Xavier: Meu criador se chama Estêvão me criou pelo python uma patlaforma de progamação"
+
+    elif "sao paulo" in pergunta and ("clima" in pergunta or "temperatura" in pergunta):
+        return "Xavier: A temperatura de Sao Paulo esta em " + str(temperaturasaopaulo)
+
+    elif "goiania" in pergunta and ("clima" in pergunta or "temperatura" in pergunta):
+        return "Xavier: A temperatura de Goiania esta em " + str(temperatura)
+
+    elif "temperatura" in pergunta or "clima" in pergunta:
+        return "Xavier: Qual, a temperatura de Sao Paulo ou a de Goiania"
 
     elif "+" in pergunta:
         try:
